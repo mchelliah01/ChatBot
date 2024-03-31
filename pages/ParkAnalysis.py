@@ -4,8 +4,8 @@ import streamlit as st
 from openai import OpenAI
 
 
-st.markdown("# Page 1: Text Generation (Lab 2, 5, 6) ❄️")
-st.sidebar.markdown("# Page 1: Text Generation ❄️")
+st.markdown("# Page 2: Parking Advice ❄️")
+st.sidebar.markdown("# Page 2: Parking Advice❄️")
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -18,7 +18,7 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
         model=model,
         messages=[
         {"role":"system",
-         "content": "Your job is to help me understand a concept that a 6-year-old can understand."},
+         "content": "Your job is to help the user find parking in the surrounding area. Please provide the user with the best parking advice."},
         {"role": "user",
          "content": prompt},
         ]
@@ -27,7 +27,7 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
 
 # create our streamlit app
 with st.form(key = "chat"):
-    prompt = st.text_input("Enter a concept you would like me to explain: ") 
+    prompt = st.text_input("Explain surrounding envrionments you would like me to explain: ") 
     
     submitted = st.form_submit_button("Submit")
     
