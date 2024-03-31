@@ -1,27 +1,44 @@
-import os
-import openai
 import streamlit as st
+import time
 from openai import OpenAI
 
+client = OpenAI(api_key='apikey')
 
-st.markdown("# Page 1: Parking Assistant ❄️")
-st.sidebar.markdown("# Page 1: Parking Assistant❄️")
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+def thread(street, date_range):
+    thread = client.beta.threads.create(
+        messages=[
+            {
+                "role": "user",
+                "content": f"Street: {street} || Date range:{date_range}"
+            }
+        ]
+    )
 
-client = OpenAI()
+    run = client.beta.threads.runs.create(
+        thread_id=thread.id,
+        assistant_id="asst_br2JCiPSMrUesGqOkFyATP58"
+    )
 
-assistant = client.beta.assistants.create(
-  name="Parking Assistant",
-  instructions="You are a chatbot for providing safe parking spots. Anlayze current police reports from the report.csv file and provide possible safe spots within sf.",
-  tools=[{"type": "retrieval"}],
-  model="gpt-4-turbo-preview",
-)
+    while run.status != 'completed':
+        run = client.beta.threads.runs.retrieve(
+            thread_id=thread.id,
+            run_id=run.id
+        )
+        print(run.status)
+        time.sleep(5)
 
-thread = client.beta.threads.create()
+    message_response = client.beta.threads.messages.list(thread.id)
+    messages = message_response.data[0].content[0].text.value
+    
+    print(messages)
+    return messages
 
-message = client.beta.threads.messages.create(
-    thread_id=thread.id,
-    role="user",
-    content="I need to solve the equation `3x + 11 = 14`. Can you help me?"
-)
+with st.form(key = "chat"):
+    street = st.text_input("Enter a street name within San Francisco: ") 
+    date_range = st.text_input("Enter a date, ranging from January 2018 to March 2024: ")
+    
+    submitted = st.form_submit_button("Submit")
+    
+    if submitted:
+        st.write(thread(street, date_range))

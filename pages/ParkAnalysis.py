@@ -3,15 +3,12 @@ import openai
 import streamlit as st
 from openai import OpenAI
 
-
 st.markdown("# Page 2: Parking Advice ❄️")
 st.sidebar.markdown("# Page 2: Parking Advice❄️")
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 client = OpenAI()
-
-
 # create a wrapper function
 def get_completion(prompt, model="gpt-3.5-turbo"):
    completion = client.chat.completions.create(
