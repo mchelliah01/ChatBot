@@ -3,8 +3,7 @@ import time
 import os
 import openai
 from openai import OpenAI
-
-from translate import translate
+from pages.translate import translate
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 client = OpenAI()
