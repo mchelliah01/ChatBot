@@ -15,7 +15,7 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
         model=model,
         messages=[
         {"role":"system",
-         "content": "Your job is to help the user find parking in the surrounding area. Please provide the user with the best parking advice."},
+         "content": "Your job is to help the user find parking whether if it's safe or not in the surrounding area. Please provide the user with the best parking advice based on the street name, current time, and/or surrounding environment with in San Francisco."},
         {"role": "user",
          "content": prompt},
         ]
@@ -24,7 +24,7 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
 
 # create our streamlit app
 with st.form(key = "chat"):
-    prompt = st.text_input("Explain surrounding envrionments you would like me to explain: ") 
+    prompt = st.text_input("Please enter a street name within San Francisco, current time, and/or surrounding environment:") 
     
     submitted = st.form_submit_button("Submit")
     

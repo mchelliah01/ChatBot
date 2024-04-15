@@ -9,7 +9,7 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 client = OpenAI()
 
 file = client.files.create(
-  file=open("datasets\SF_20240414.csv", "rb"),
+  file=open("datasets/SF_20240414.csv", "rb"),
   purpose='assistants'
 )
 
