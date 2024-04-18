@@ -4,9 +4,13 @@ import os
 import openai
 from openai import OpenAI
 from functions.translate import translate
+import pandas as pd
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 client = OpenAI()
+
+df = pd.read_csv('datasets/Street_Names_20240418.csv')
+print(df)
 
 def thread(street, date_range):
     thread = client.beta.threads.create(
@@ -40,9 +44,10 @@ def thread(street, date_range):
 st.markdown("# SFPD Incident Report Analyzer 🚨")
 st.sidebar.markdown("# SFPD Incident Report Analyzer 🚨")
 
-#st.title("SFPD Incident Report Analyzer")
 
 with st.form(key = "chat"):
+    
+    st.header("Setup")
 
     c1, c2 = st.columns([1, 1], gap="medium")
     with c1:
@@ -57,7 +62,8 @@ with st.form(key = "chat"):
 
     with c3:
         st.header("Street Name")
-        street = st.text_input("Enter a street name within San Francisco: ") 
+        #street = st.text_input("Enter a street name within San Francisco: ") 
+        street = st.selectbox("Select a street",options=df)
         st.caption("Example: McAllister St")
 
     with c4:
