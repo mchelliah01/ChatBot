@@ -2,6 +2,7 @@ import os
 import openai
 import streamlit as st
 from openai import OpenAI
+from functions.translate import translate
 
 st.markdown("# Page 2: Parking Advice ❄️")
 st.sidebar.markdown("# Page 2: Parking Advice❄️")
@@ -27,6 +28,14 @@ with st.form(key = "chat"):
     prompt = st.text_input("Please enter a street name within San Francisco, current time, and/or surrounding environment:") 
     
     submitted = st.form_submit_button("Submit")
-    
+
+    if st.session_state['source_language'] != st.session_state['target_language']:
+        st.caption(f'Translating into {st.session_state["target_language"]} from {st.session_state["source_language"]}')
+
     if submitted:
-        st.write(get_completion(prompt))
+        if st.session_state['source_language'] != st.session_state['target_language']:
+            text = get_completion(prompt)
+            st.write(f"Translated into {st.session_state['target_language']}")
+            st.write(translate(text, st.session_state['source_language'], st.session_state['target_language']))
+        else:
+            st.write(get_completion(prompt))
