@@ -4,8 +4,8 @@ import streamlit as st
 from openai import OpenAI
 from functions.translate import translate
 
-st.markdown("# Page 2: Parking Advice ❄️")
-st.sidebar.markdown("# Page 2: Parking Advice❄️")
+st.markdown("# Parking Advice 💬")
+st.sidebar.markdown("# Parking Advice 💬")
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -33,9 +33,10 @@ with st.form(key = "chat"):
         st.caption(f'Translating into {st.session_state["target_language"]} from {st.session_state["source_language"]}')
 
     if submitted:
+        
         if st.session_state['source_language'] != st.session_state['target_language']:
             text = get_completion(prompt)
-            st.write(f"Translated into {st.session_state['target_language']}")
+            st.write("Translated into {st.session_state['target_language']}")
             st.write(translate(text, st.session_state['source_language'], st.session_state['target_language']))
         else:
             st.write(get_completion(prompt))
