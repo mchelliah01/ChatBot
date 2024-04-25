@@ -10,7 +10,6 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 client = OpenAI()
 
 df = pd.read_csv('datasets/Street_Names_20240418.csv')
-print(df)
 
 def thread(street, date_range):
     thread = client.beta.threads.create(
@@ -64,7 +63,6 @@ with st.form(key = "chat"):
         st.header("Street Name")
         #street = st.text_input("Enter a street name within San Francisco: ") 
         street = st.selectbox("Select a street",options=df)
-        st.caption("Example: McAllister St")
 
     with c4:
         st.header("Date Range")
