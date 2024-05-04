@@ -5,7 +5,9 @@ import openai
 from openai import OpenAI
 from functions.translate import translate
 import pandas as pd
-#from geopy.geocoders import Nominatim                      #Disabled; See get_coordinates()
+from geopy.geocoders import Nominatim                      #Disabled; See get_coordinates()
+import folium
+from streamlit_folium import st_folium
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 client = OpenAI()
@@ -40,7 +42,7 @@ def thread(street1, street2, date_range):
     
     return messages
 
-#def get_coordinates(input_address):                                #Disabled; Assistant would constantly make mistakes and ask to try the analysis again.
+def get_coordinates(input_address):                                #Disabled; Assistant would constantly make mistakes and ask to try the analysis again.
     loc = Nominatim(user_agent="Geopy Library")                     #Switching models to gpt-4-turbo yielded promising results, but token usage is a factor here.
     getLoc = loc.geocode(input_address)
 
@@ -54,26 +56,36 @@ st.markdown("# SFPD Incident Report Analyzer 🚨")
 st.sidebar.markdown("# SFPD Incident Report Analyzer 🚨")
 
 with st.form(key = "chat"):
-
-    c1, c2 = st.columns([1, 1], gap="medium")
+    
+    c1, c2, c3 = st.columns([2,2,2], gap="medium")
 
     with c1:
+        st.header("Address Confirmation")
+        input_address = st.text_input("Enter an address")
+        confirm_address = st.form_submit_button("Confirm address")
+        if confirm_address:                                                
+            address, latitude, longitude = get_coordinates(input_address)   #TODO: Check if city within San Francisco
+            st.write(address)
+
+            map = folium.Map(location=[latitude, longitude], zoom_start=30)
+            map.add_child(folium.Marker(location=[latitude, longitude],popup=address,icon=folium.Icon(color='blue')))
+            
+            st_data = st_folium(map, width=250, height=250)
+
+    with c2:
         st.header("Intersection")
         street1 = st.selectbox("Select a street",options=df, key="sn1")
         street2 = st.selectbox("Select a street",options=df, key="sn2")
+        if confirm_address:
+            st.caption("Pick the two nearest intersections to your location.")
 
-        #if confirm_address:                                                #Disabled; See get_coordinates()
-            #address, latitude, longitude = get_coordinates(input_address)   #TODO: Check if city within San Francisco
-            #st.write(address)
-
-    with c2:
+    with c3:
         st.header("Date Range")
         date1 = st.date_input("From")
         date2 = st.date_input('To')
         date_range = (f'{date1} to {date2}')
-
-    submitted = st.form_submit_button("Analyze")
-    st.caption("Disclaimer: Assistant may exaggerate when creating an intersection-specific analysis. Citywide report is generally accurate.")
+        submitted = st.form_submit_button("Analyze")
+        st.caption("Disclaimer: Assistant may exaggerate when creating an intersection-specific analysis. Citywide report is generally accurate.")
 
     try:
         if st.session_state['source_language'] != st.session_state['target_language']:
