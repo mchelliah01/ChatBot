@@ -20,7 +20,7 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
         model=model,
         messages=[
         {"role":"system",
-         "content": "Your job is to help the user find parking whether if it's safe or not in the surrounding area. Please provide the user with the best parking advice based on the street name, current time, and/or surrounding environment with in San Francisco."},
+         "content": "Your job is to help the user find parking whether if it's safe or not in the surrounding area. Please provide the user with the best parking advice based on the street name, current time, and/or surrounding environment with in San Francisco. If there is any known events going on a certain days, please refer to it as well."},
         {"role": "user",
          "content": prompt},
         ]
