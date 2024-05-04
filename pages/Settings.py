@@ -31,19 +31,19 @@ with st.form(key="settings"):
 
     if create_submitted:
         file = client.files.create(
-        file=open("datasets/SF_20240414.csv", "rb"),
+        file=open("datasets/SF_050124_INTERSECTIONS.csv", "rb"),
         purpose='assistants'
         )
 
         assistant = client.beta.assistants.create(
             name="Vehicle Theft Data Analysis",
             instructions="\
-            You will receive a street and date range (from January 2018 to April 2024) for analysis.\n\
+            You will receive a point and date range from a .csv file (from January 2018 to May 2024) for analysis.\n\
             # 1. With the date range, check the number of incidents that occurred in that range and tell the user. Don't check the file if the date range is invalid. Immediately stop.\n\
             # 2. With the street name, check the intersections. Pay attention under the incident_description column for the number of incidents.\n\
             # 3. Tell the user the overall number of incidents in the city that occurred within that date range compared to the number of incidents that occurred that occurred within that date range for the given street.\n\
             Keep it text only.\n\
-            Take a break before responding.",
+            Take a break before responding and make sure you are returning accurate info.",
             tools=[{"type": "code_interpreter"}],
             file_ids=[file.id],
             model="gpt-3.5-turbo",
