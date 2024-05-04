@@ -91,3 +91,4 @@ with st.form(key = "chat"):
     except KeyError:
         st.error("No assistant found.")
         st.page_link("pages/Settings.py", label="🚨Setup your assistant here🚨")
+        
