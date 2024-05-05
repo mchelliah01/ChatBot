@@ -4,6 +4,8 @@ import streamlit as st
 import pandas as pd
 from openai import OpenAI
 
+st.sidebar.markdown("# Settings ⚙️")
+
 openai.api_key = os.environ["OPENAI_API_KEY"]
 client = OpenAI()
 
