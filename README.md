@@ -89,4 +89,4 @@ Follow **4. Use Environment Variables in place of your API key** in the tutorial
     - [Spotipy](https://spotipy.readthedocs.io/en/2.22.1/)
     - [Twitter Developer Platform overview | Docs](https://developer.twitter.com/en/docs/platform-overview)
 
-Contributors: YeeKit Chan, Erica Lai
+Contributor: Woojin Park
